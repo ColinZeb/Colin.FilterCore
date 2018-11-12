@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colin.FilterCore", "Colin.FilterCore\Colin.FilterCore.csproj", "{20D7A3C4-7F9D-4160-83D5-509272FC595F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colin.FilterCore", "Colin.FilterCore\Colin.FilterCore.csproj", "{20D7A3C4-7F9D-4160-83D5-509272FC595F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colin.FilterCore.XUnitTest", "Colin.FilterCore.XUnitTest\Colin.FilterCore.XUnitTest.csproj", "{2C6BAC4F-49B3-4DE3-B933-19AD224B2478}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colin.FilterCore.XUnitTest", "Colin.FilterCore.XUnitTest\Colin.FilterCore.XUnitTest.csproj", "{2C6BAC4F-49B3-4DE3-B933-19AD224B2478}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{440BBBB4-40A6-47B7-A998-6E1739BB9CC9}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

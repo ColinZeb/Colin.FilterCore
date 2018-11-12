@@ -14,11 +14,16 @@ namespace Colin.FilterCore
         public static void AddFilter<F>(this ModelBuilder modelBuilder, Expression<Func<F, bool>> lambdaExpression)
         {
             var ftype = typeof(F);
-            GlobaQuerylFilters.Filters.Add(typeof(F).Name, new FilterInfo
+            modelBuilder.AddFilter(ftype.Name, lambdaExpression);
+        }
+
+        public static void AddFilter<F>(this ModelBuilder modelBuilder,string filterName, Expression<Func<F, bool>> lambdaExpression)
+        {
+            var ftype = typeof(F);
+            GlobaQuerylFilters.Filters.Add(filterName, new FilterInfo<F>(filterName)
             {
-                Name = typeof(F).Name,
                 Expression = lambdaExpression,
-                FilterType = typeof(F)
+                FilterType = ftype
             });
         }
 
@@ -31,31 +36,56 @@ namespace Colin.FilterCore
                 var param = Expression.Parameter(entitytype, "param");
 
                 LambdaExpression lambdaExpression = null;
-                foreach (var f in GlobaQuerylFilters.Filters)
-                {
-                    var ftype = f.Value.FilterType;
-                    if (ftype.IsAssignableFrom(item.ClrType))
-                    {
-                        var visitor = new ParameterTypeVisitor(ftype, entitytype);
-                        var a = (LambdaExpression)visitor.Visit(f.Value.Expression);
-
-                        if (lambdaExpression == null)
-                        {
-                            lambdaExpression = a;
-                        }
-                        else
-                        {
-                            lambdaExpression = lambdaExpression.AndAlso(a);
-                        }
-                    }
-                }
+                lambdaExpression = BuildExpression(entitytype);
                 if (lambdaExpression != null)
                 {
                     item.QueryFilter = lambdaExpression;
                 }
             }
         }
+        /// <summary>
+        /// 用过滤器构建表达式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="query"></param>
+        /// <param name="disablefilters"></param>
+        /// <param name="rev"></param>
+        /// <returns></returns>
+        internal static Expression<Func<T, bool>> BuildExpression<T>(this IQueryable<T> query,  string[] disablefilters,bool rev=false)
+        {
+            return typeof(T).BuildExpression(disablefilters,rev) as Expression<Func<T, bool>>;
+        }
+        internal static LambdaExpression BuildExpression(this Type entitytype,params string[] filters)
+        {
+            return BuildExpression(entitytype, filters, false);
+        }
+        internal static LambdaExpression BuildExpression(this Type entitytype, string[] filters,bool rev)
+        {
+            LambdaExpression lambdaExpression = null;
+            var usefilters = rev ?
+                GlobaQuerylFilters.Filters.Where(x => filters.Contains(x.Key)) :
+                GlobaQuerylFilters.Filters.Where(x => !filters.Contains(x.Key));
+            foreach (var f in usefilters)
+            {
+                var ftype = f.Value.FilterType;
+                if (ftype.IsAssignableFrom(entitytype))
+                {
+                    var visitor = new ParameterTypeVisitor(ftype, entitytype);
+                    var a = (LambdaExpression)visitor.Visit(f.Value.Expression);
 
+                    if (lambdaExpression == null)
+                    {
+                        lambdaExpression = a;
+                    }
+                    else
+                    {
+                        lambdaExpression = lambdaExpression.AndAlso(a);
+                    }
+                }
+            }
+
+            return lambdaExpression;
+        }
 
         public static LambdaExpression AndAlso(this LambdaExpression expr1, LambdaExpression expr2)
         {

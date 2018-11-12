@@ -20,6 +20,19 @@ namespace Colin.FilterCore
 
     public class FilterInfo<F> : FilterInfo
     {
+        public FilterInfo()
+        {
+            Name = typeof(F).Name;
+        }
+        public FilterInfo(string filterName)
+        {
+            if (string.IsNullOrWhiteSpace(filterName))
+            {
+                throw new ArgumentException("message", nameof(filterName));
+            }
+
+            Name = filterName;
+        }
         new public Expression<Func<F, bool>> Expression { get => base.Expression as Expression<Func<F, bool>>; set => base.Expression = value; }
     }
 }
