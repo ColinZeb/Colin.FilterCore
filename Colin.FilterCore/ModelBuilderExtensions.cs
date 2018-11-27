@@ -10,13 +10,25 @@ namespace Colin.FilterCore
 {
     public static class ModelBuilderExtensions
     {
-
+        /// <summary>
+        /// 添加过滤器
+        /// </summary>
+        /// <typeparam name="F"></typeparam>
+        /// <param name="modelBuilder"></param>
+        /// <param name="lambdaExpression">过滤表达式</param>
         public static void AddFilter<F>(this ModelBuilder modelBuilder, Expression<Func<F, bool>> lambdaExpression)
         {
             var ftype = typeof(F);
             modelBuilder.AddFilter(ftype.Name, lambdaExpression);
         }
-
+        
+        /// <summary>
+        /// 添加带名称的过滤器
+        /// </summary>
+        /// <typeparam name="F"></typeparam>
+        /// <param name="modelBuilder"></param>
+        /// <param name="filterName">过滤器名称</param>
+        /// <param name="lambdaExpression">过滤器表达式</param>
         public static void AddFilter<F>(this ModelBuilder modelBuilder,string filterName, Expression<Func<F, bool>> lambdaExpression)
         {
             var ftype = typeof(F);
@@ -26,7 +38,10 @@ namespace Colin.FilterCore
                 FilterType = ftype
             });
         }
-
+        /// <summary>
+        /// 启用过滤器
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         public static void EnableFilters(this ModelBuilder modelBuilder)
         {
             var model = modelBuilder.Model;

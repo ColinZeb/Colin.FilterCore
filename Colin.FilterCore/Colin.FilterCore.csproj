@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Colin</Authors>
+    <Description>a simple filter for ef core.
+modelBuilder.AddFilter&lt;F&gt;(Expression&lt;Func&lt;F, bool&gt;&gt; lambdaExpression)</Description>
+    <PackageTags>EFCore EntityFrameworkCore Filter</PackageTags>
+    <PackageIconUrl>https://cn.gravatar.com/userimage/85206979/00702c05bc81dba4a999914f13cf1741.png?size=200</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
